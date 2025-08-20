@@ -11,6 +11,6 @@ y_coords = getindex.(data, 2)
 
 data_matrix = hcat(x_coords, y_coords)'
 
-distance_matrix = pairwise(Euclidean(), data_matrix);
+distance_matrix = Distances.pairwise(Euclidean(), data_matrix);
 
-scatter(data; label="data", markersize=2, aspect_ratio=1)
+Plots.scatter(data; label="data", markersize=2, aspect_ratio=1)
