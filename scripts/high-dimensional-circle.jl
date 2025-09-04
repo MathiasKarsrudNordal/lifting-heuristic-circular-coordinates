@@ -1,15 +1,24 @@
 include("../src/datasets.jl")
+include("../src/utils.jl")
 using .Datasets
+using .Utils
+
 using MultivariateStats, LinearAlgebra, Statistics
+using Ripserer, Distances
 using CairoMakie
 using LaTeXStrings
 
-savefig = false
+savefig = true
 n_points = 1000
 embedding_dim = 300
 
 # Generate data
 θ, X_embedded = circle(n_points, embedding_dim)
+
+## Print first and last value of θ to verify range
+println("First angle: ", θ[1])
+println("Last angle: ", θ[end])
+
 
 ## ============================== PCA Projection ==============================
 # Apply PCA
@@ -45,4 +54,16 @@ if savefig
     save("figs/pca-high-dim-circle.pdf", fig_pca)
 end
 
-## ============================== Circular Coordinates ==============================
+## ============================== Circular Coordinates ======================
+p = 47
+thresh = 20
+
+DistMatrix = pairwise(Euclidean(), X_embedded')  # (n_points × n_points)
+rips = Ripserer.ripserer(DistMatrix; dim_max=1, modulus=p, threshold=thresh, progress=true)
+
+fig_ph = Utils.plot_persistence_diagram(rips; infinity=thresh, palette=(:blue, :orange, :green))
+display(fig_ph)
+
+if savefig
+    save("figs/persistence-diagram-high-dim-circle.pdf", fig_ph)
+end

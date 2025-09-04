@@ -18,7 +18,7 @@ end
 function circle(n_points::Int, embedding_dim::Int)
     embedding_dim < 2 && throw(ArgumentError("embedding_dim must be at least 2"))
 
-    θ = range(0, 2π; length=n_points)
+    θ = range(0, 2π; length=n_points+1)[1:end-1]  # avoid duplicate point at 2π
     θ_norm = θ ./ (2π)
 
     X_embedded = zeros(n_points, embedding_dim)
