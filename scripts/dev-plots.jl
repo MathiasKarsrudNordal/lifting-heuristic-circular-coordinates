@@ -13,4 +13,5 @@ data_matrix = hcat(x_coords, y_coords)'
 
 distance_matrix = Distances.pairwise(Euclidean(), data_matrix);
 
-Plots.scatter(data; label="data", markersize=2, aspect_ratio=1)
+plt = Plots.scatter(data; label="data", markersize=2, aspect_ratio=1)
+display(plt)
