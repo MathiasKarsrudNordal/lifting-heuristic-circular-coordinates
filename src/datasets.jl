@@ -7,7 +7,7 @@ export annulus
 
 function annulus(n, r1=1, r2=2, offset=(0.0, 0.0))
     θ = 2π .* rand(n)
-    # scale radius so that points are uniformly distributed in the annulus area
+
     r = sqrt.(rand(n) .* (r2^2 - r1^2) .+ r1^2)
     x = r .* cos.(θ) .+ offset[1]
     y = r .* sin.(θ) .+ offset[2]
