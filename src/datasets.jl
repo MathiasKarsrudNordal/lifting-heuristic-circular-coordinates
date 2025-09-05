@@ -2,8 +2,10 @@ module Datasets
 
 using LinearAlgebra
 using Distances
+using Random
+using Distributions
 
-export annulus, circle
+export annulus, circle, torus_knot
 
 function annulus(n::Int, r1::Float64=1.0, r2::Float64=2.0, offset::Tuple{Float64, Float64}=(0.0, 0.0))
     θ = 2π .* rand(n)
@@ -38,6 +40,35 @@ function circle(n_points::Int, embedding_dim::Int)
     println("Returning angles of shape $(size(θ_norm)) and point cloud of shape $(size(X_embedded)).")
 
     return θ_norm, X_embedded
+end
+
+function torus_knot(; p=2, q=3, n_samples=2500, R=5.0, r=2.0, noise_var=0.2, type_noise="gaussian") 
+    Random.seed!(0)  # reproducibility
+
+    # uniform theta samples
+    θ = rand(Uniform(0, 2π), n_samples)
+
+    if type_noise == "gaussian"
+        noise = Normal(0, sqrt(noise_var))
+        noise_x = rand(noise, n_samples)
+        noise_y = rand(noise, n_samples)
+        noise_z = rand(noise, n_samples)
+    elseif type_noise == "uniform"
+        noise = Uniform(-sqrt(3*noise_var), sqrt(3*noise_var))
+        noise_x = rand(noise, n_samples)
+        noise_y = rand(noise, n_samples)
+        noise_z = rand(noise, n_samples)
+    else
+        error("Unknown noise type: $type_noise. Use 'gaussian' or 'uniform'.")
+    end
+    
+    # parametric equations of the knot
+    x = (R .+ r .* cos.(q .* θ)) .* cos.(p .* θ) .+ noise_x
+    y = (R .+ r .* cos.(q .* θ)) .* sin.(p .* θ) .+ noise_y
+    z = r .* sin.(q .* θ) .+ noise_z
+
+    X = hcat(x, y, z)
+    return X, θ ./ (2π)
 end
 
 end # module Datasets

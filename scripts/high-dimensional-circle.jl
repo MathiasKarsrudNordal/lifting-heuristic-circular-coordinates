@@ -16,7 +16,7 @@ embedding_dim = 300
 
 # Generate data
 θ, X_embedded = Datasets.circle(n_points, embedding_dim)
-X = row_tuples = [Tuple(X_embedded[i, :]) for i in 1:size(X_embedded, 1)]
+X = [Tuple(X_embedded[i, :]) for i in 1:size(X_embedded, 1)]
 
 ## Print first and last value of θ to verify range
 println("First angle: ", θ[1])
