@@ -28,8 +28,6 @@ X_pca = transform(model, X_embedded')'
 # Remove points with x value > 2 (only first column)
 X_pca[abs.(X_pca[:, 1]) .> 2, 1] .= 0
 
-println("Explained variance ratio = ", principalvars(model) ./ tvar(model))
-
 fig_pca = Figure(resolution = (600, 600), fontsize = 14, figure_padding = 75)
 ax = Axis(fig_pca[1, 1];
     title = latexstring("PCA Projection of \$S^1 \\subseteq \\mathbb{R}^{$embedding_dim}\$"),

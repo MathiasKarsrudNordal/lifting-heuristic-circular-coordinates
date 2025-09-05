@@ -7,12 +7,14 @@ using LaTeXStrings
 export plot_persistence_diagram
 
 function plot_persistence_diagram(result; infinity=Inf, palette=Makie.wong_colors())
-    fig = Figure(resolution = (600, 600))
+    fig = Figure(resolution = (600, 600), fontsize = 14, figure_padding = 75)
     ax = Axis(fig[1, 1];
         titlesize = 28,   # << increase title font size
-        title = L"Persistence Diagram",
-        xlabel = latexstring("\$Birth\$"),
-        ylabel = latexstring("\$Death\$"),
+        title = L"\text{Persistence Diagram}",
+        xlabelsize = 24,
+        xlabel = L"\text{Birth}",
+        ylabelsize = 24,
+        ylabel = L"\text{Death}",
         aspect = 1
     )
 
@@ -41,9 +43,22 @@ function plot_persistence_diagram(result; infinity=Inf, palette=Makie.wong_color
         births = [p.birth for p in diag]
         deaths = [isinf(p.death) ? infinity : p.death for p in diag]
         scatter!(ax, births, deaths;
-            markersize = 10,
+            markersize = 15,
             color = palette[(dim - 1) % length(palette) + 1],
-            label = "H$(dim - 1)"
+            label = latexstring("H_{$(dim - 1)}")
+        )
+    end
+
+    # Highlight the last H1 point if it exists
+    if length(result) ≥ 2 && !isempty(result[2])
+        last_point = result[2][end]
+        b = last_point.birth
+        d = isinf(last_point.death) ? infinity : last_point.death
+        scatter!(ax, [b], [d];
+            markersize = 30,
+            color = :transparent,
+            strokecolor = :black,
+            strokewidth = 2,
         )
     end
 
@@ -56,8 +71,12 @@ function plot_persistence_diagram(result; infinity=Inf, palette=Makie.wong_color
     # Square limits and legend
     xlims!(ax, lo, hi)
     ylims!(ax, lo, hi)
-    axislegend(ax, position = :rb)
+    axislegend(ax, position = :rb, labelsize=24)
 
+    ax.xticksvisible = false       # hide the ticks
+    ax.xticklabelsvisible = false  # hide the tick labels
+    ax.yticksvisible = false
+    ax.yticklabelsvisible = false
     return fig
 end
 
