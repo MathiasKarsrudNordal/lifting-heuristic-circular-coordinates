@@ -8,12 +8,13 @@ using Ripserer, Distances
 using CairoMakie
 using LaTeXStrings
 
-savefig = true
+savefig = false
 n_points = 1000
 embedding_dim = 300
 
 # Generate data
 θ, X_embedded = circle(n_points, embedding_dim)
+X = row_tuples = [Tuple(X_embedded[i, :]) for i in 1:size(X_embedded, 1)]
 
 ## Print first and last value of θ to verify range
 println("First angle: ", θ[1])
@@ -28,7 +29,7 @@ X_pca = transform(model, X_embedded')'
 # Remove points with x value > 2 (only first column)
 X_pca[abs.(X_pca[:, 1]) .> 2, 1] .= 0
 
-fig_pca = Figure(resolution = (600, 600), fontsize = 14, figure_padding = 75)
+fig_pca = Figure(size = (600, 600), fontsize = 14, figure_padding = 75)
 ax = Axis(fig_pca[1, 1];
     title = latexstring("PCA Projection of \$S^1 \\subseteq \\mathbb{R}^{$embedding_dim}\$"),
     titlesize = 28,   # << increase title font size
@@ -52,16 +53,19 @@ if savefig
     save("figs/pca-high-dim-circle.pdf", fig_pca)
 end
 
-## ============================== Circular Coordinates ======================
+## ============================== Persistence Diagram ======================
 p = 47
 thresh = 20
 
 DistMatrix = pairwise(Euclidean(), X_embedded')  # (n_points × n_points)
-rips = Ripserer.ripserer(DistMatrix; dim_max=1, modulus=p, threshold=thresh, progress=true)
+rips = Ripserer.ripserer(DistMatrix; dim_max=1, modulus=p, threshold=thresh, verbose=true)
 
-fig_ph = Utils.plot_persistence_diagram(rips; infinity=thresh, palette=(:blue, :orange, :green))
-display(fig_ph)
+# fig_ph = Utils.plot_persistence_diagram(rips; infinity=thresh, palette=(:blue, :orange, :green))
+# display(fig_ph)
 
 if savefig
     save("figs/persistence-diagram-high-dim-circle.pdf", fig_ph)
 end
+
+## ============================== Circular Coordinates ======================
+cc = Ripserer.CircularCoordinates(X, 1000; modulus=47, verbose=true)

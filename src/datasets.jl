@@ -12,7 +12,7 @@ function annulus(n::Int, r1::Float64=1.0, r2::Float64=2.0, offset::Tuple{Float64
     r = sqrt.(rand(n) .* (r2^2 - r1^2) .+ r1^2)
     x = r .* cos.(θ) .+ offset[1]
     y = r .* sin.(θ) .+ offset[2]
-    return [(x[i], y[i]) for i in 1:n]
+    return [(x[i], y[i]) for i in 1:n], θ ./ (2π)
 end
 
 function circle(n_points::Int, embedding_dim::Int)

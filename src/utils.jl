@@ -7,7 +7,7 @@ using LaTeXStrings
 export plot_persistence_diagram
 
 function plot_persistence_diagram(result; infinity=Inf, palette=Makie.wong_colors())
-    fig = Figure(resolution = (600, 600), fontsize = 14, figure_padding = 75)
+    fig = Figure(size = (600, 600), fontsize = 14, figure_padding = 75)
     ax = Axis(fig[1, 1];
         titlesize = 28,   # << increase title font size
         title = L"\text{Persistence Diagram}",
