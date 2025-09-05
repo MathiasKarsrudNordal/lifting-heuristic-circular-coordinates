@@ -11,7 +11,7 @@ using IterativeSolvers
 
 export get_circular_coordinates
 
-function get_circular_coordinates(point_cloud, modulus, threshold = Inf, sparse = false, multpl = 1, verbose = true)
+function get_circular_coordinates(point_cloud, modulus; threshold = Inf, sparse = false, multpl = 1, verbose = true)
     distance_matrix = pairwise(Euclidean(), point_cloud)
 
     rips = Ripserer.Rips(distance_matrix, sparse = sparse, threshold = threshold)
