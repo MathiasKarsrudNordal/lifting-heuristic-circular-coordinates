@@ -3,8 +3,7 @@ module Datasets
 using LinearAlgebra
 using Distances
 
-export annulus
-export circle
+export annulus, circle
 
 function annulus(n::Int, r1::Float64=1.0, r2::Float64=2.0, offset::Tuple{Float64, Float64}=(0.0, 0.0))
     θ = 2π .* rand(n)

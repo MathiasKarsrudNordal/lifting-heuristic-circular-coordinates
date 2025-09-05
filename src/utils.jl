@@ -37,6 +37,12 @@ function plot_persistence_diagram(result; infinity=Inf, palette=Makie.wong_color
         hi += 0.1 * hi
     end
 
+    # Diagonal y = x (use a vector of Point2f to avoid the tuple-of-tuples error)
+    lines!(ax, [Point2f(lo, lo), Point2f(hi, hi)];
+        color = :gray, linestyle = :dash)
+    lines!(ax, [Point2f(lo, infinity), Point2f(hi, infinity)];
+        color = :gray, linestyle = :dash)
+
     # Plot each homology dimension with its own color + legend label
     for (dim, diag) in enumerate(result)   # dim=1→H₀, dim=2→H₁, ...
         isempty(diag) && continue
@@ -62,11 +68,7 @@ function plot_persistence_diagram(result; infinity=Inf, palette=Makie.wong_color
         )
     end
 
-    # Diagonal y = x (use a vector of Point2f to avoid the tuple-of-tuples error)
-    lines!(ax, [Point2f(lo, lo), Point2f(hi, hi)];
-        color = :gray, linestyle = :dash)
-    lines!(ax, [Point2f(lo, infinity), Point2f(hi, infinity)];
-        color = :gray, linestyle = :dash)
+    
 
     # Square limits and legend
     xlims!(ax, lo, hi)

@@ -8,12 +8,12 @@ using Ripserer, Distances
 using CairoMakie
 using LaTeXStrings
 
-savefig = false
+savefig = true
 n_points = 1000
 embedding_dim = 300
 
 # Generate data
-θ, X_embedded = circle(n_points, embedding_dim)
+θ, X_embedded = Datasets.circle(n_points, embedding_dim)
 X = row_tuples = [Tuple(X_embedded[i, :]) for i in 1:size(X_embedded, 1)]
 
 ## Print first and last value of θ to verify range
@@ -60,12 +60,11 @@ thresh = 20
 DistMatrix = pairwise(Euclidean(), X_embedded')  # (n_points × n_points)
 rips = Ripserer.ripserer(DistMatrix; dim_max=1, modulus=p, threshold=thresh, verbose=true)
 
-# fig_ph = Utils.plot_persistence_diagram(rips; infinity=thresh, palette=(:blue, :orange, :green))
-# display(fig_ph)
+fig_ph = Utils.plot_persistence_diagram(rips; infinity=thresh, palette=(:blue, :orange, :green))
+display(fig_ph)
 
 if savefig
     save("figs/persistence-diagram-high-dim-circle.pdf", fig_ph)
 end
 
 ## ============================== Circular Coordinates ======================
-cc = Ripserer.CircularCoordinates(X, 1000; modulus=47, verbose=true)
