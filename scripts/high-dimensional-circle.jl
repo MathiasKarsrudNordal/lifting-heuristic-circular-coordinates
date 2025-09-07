@@ -10,17 +10,13 @@ using Ripserer, Distances
 using CairoMakie
 using LaTeXStrings
 
-savefig = false
+savefig = true
 n_points = 1000
 embedding_dim = 300
 
 # Generate data
 θ, X_embedded = Datasets.circle(n_points, embedding_dim)
 X = [Tuple(X_embedded[i, :]) for i in 1:size(X_embedded, 1)]
-
-## Print first and last value of θ to verify range
-println("First angle: ", θ[1])
-println("Last angle: ", θ[end])
 
 
 ## ============================== PCA Projection ==============================
@@ -71,17 +67,15 @@ end
 
 ## ============================== Circular Coordinates ======================
 th = 17.3
-θ_cc = CircularCoordinates.get_circular_coordinates(X, p; threshold = th, verbose = true)
+scale_factors = [1, 10]
+θ_cc_array = CircularCoordinates.get_circular_coordinates(X, p; threshold = th, multpl = scale_factors, verbose = true)
 
-scales = [1, 5]
 fig = Figure(size = (1000, 1000), fontsize = 14, figure_padding = 75)
-for (i, scale) in enumerate(scales)
-    θ_scaled = (θ_cc .* scale) .% 1.0
-
+for (i, θs) in enumerate(θ_cc_array)
     ax_pca = Axis(fig[i, 1]; aspect = 1)
     scatter!(ax_pca, X_pca[:, 1], X_pca[:, 2];
         markersize = 10,
-        color = θ_scaled,
+        color = θs,
         colormap = :plasma,
         transparency = true
     )
@@ -89,9 +83,9 @@ for (i, scale) in enumerate(scales)
     hideydecorations!(ax_pca; ticks=true, ticklabels=true, grid=true)
 
     ax_cc_vs_orig = Axis(fig[i, 2]; aspect = 1)
-    scatter!(ax_cc_vs_orig, θ, θ_scaled;
+    scatter!(ax_cc_vs_orig, θ, θs;
         markersize = 6,
-        color = θ_scaled,
+        color = θs,
         colormap = :plasma,
         transparency = true
     )

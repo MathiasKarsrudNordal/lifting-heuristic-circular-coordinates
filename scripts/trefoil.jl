@@ -10,7 +10,7 @@ using Ripserer, Distances
 using CairoMakie
 using LaTeXStrings
 
-savefig = false
+savefig = true
 n_points = 2500
 
 X, θ = Datasets.torus_knot(p=2, q=3, n_samples=n_points, R=5.0, r=2.0, noise_var=0.1, type_noise="gaussian")
@@ -38,21 +38,19 @@ fig_ph = Utils.plot_persistence_diagram(rips; infinity = 5.0, palette = (:blue, 
 display(fig_ph)
 
 # === Circular Coordinates ===
-th = 3.5
-
 point_cloud = [Tuple(X[i, :]) for i in 1:size(X, 1)]
-θ_cc = CircularCoordinates.get_circular_coordinates(point_cloud, p; threshold = 3.5, verbose = true)
 
+th = 3.5
+scale_factors = [1, 2]
 
+θ_cc_array = CircularCoordinates.get_circular_coordinates(point_cloud, p; threshold = 3.5, multpl = scale_factors, verbose = true)
 
-scales = [1, 2]
 fig = Figure(size = (800, 400), fontsize = 14, figure_padding = 25)
-for (i, scale) in enumerate(scales)
-    θ_scaled = (θ_cc .* scale) .% 1.0
+for (i, θs) in enumerate(θ_cc_array)
     ax = Axis(fig[1, i]; aspect = 1)
     scatter!(ax, X[:, 1], X[:, 2];
         markersize = 4,
-        color = θ_scaled,
+        color = θs,
         colormap = :plasma,
         transparency = true
     )
@@ -62,5 +60,5 @@ end
 display(fig)
 
 if savefig
-    save("figs/torus-knot-circular-coordinates.pdf", fig)
+    save("figs/trefoil.pdf", fig)
 end

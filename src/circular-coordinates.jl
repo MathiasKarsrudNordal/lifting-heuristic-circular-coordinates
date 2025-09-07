@@ -12,27 +12,46 @@ using IterativeSolvers
 export get_circular_coordinates
 
 function get_circular_coordinates(point_cloud, modulus; threshold = Inf, sparse = false, multpl = 1, verbose = true)
+    # Pairwise distance matrix
     distance_matrix = pairwise(Euclidean(), point_cloud)
 
+    # Persistent cohomology
     rips = Ripserer.Rips(distance_matrix, sparse = sparse, threshold = threshold)
     diagram_cocycles = ripserer(rips; reps = [1], modulus = modulus, verbose = verbose)
     thresh_for_X = diagram_cocycles[2][end][2] + 1e-10
 
+    # Extract most persistent cocycle
     most_persistent_co = diagram_cocycles[2][end]
     cocycle = Ripserer.representative(most_persistent_co)
     simps_co = Ripserer.vertices.(cocycle)
     simps_co = simps_co[Ripserer.birth.(cocycle) .< thresh_for_X]
 
+    # Build simplicial complex and boundary operator
     edges_X = Ripserer.vertices.(Ripserer.edges(rips))[birth.(Ripserer.edges(rips)).<thresh_for_X]
     D_tilde, simps_tilde, L1_dim = CircularCoordinates.build_complex_and_boundary_operator(Ripserer.vertices(rips), edges_X)
 
-    cocycle = cocycle[birth.(cocycle).<thresh_for_X]
-    base_change_cocycle_tilde = CircularCoordinates.base_change(D_tilde, cocycle, modulus, multpl)
+    cocycle = cocycle[birth.(cocycle) .< thresh_for_X]
 
-    θ_cc = mod.(Array(IterativeSolvers.lsmr(transpose(D_tilde[1:size(point_cloud)[1], 1:L1_dim]), base_change_cocycle_tilde[1:L1_dim])), 1.0)
+    # Ensure multpl is iterable
+    multipliers = isa(multpl, Integer) ? [multpl] : multpl
 
-    return θ_cc
+    results = Vector{Vector{Float64}}(undef, length(multipliers))
+    for (i, m) in enumerate(multipliers)
+        base_change_cocycle_tilde = CircularCoordinates.base_change(D_tilde, cocycle, modulus, m)
+
+        θ_cc = mod.(Array(
+            IterativeSolvers.lsmr(
+                transpose(D_tilde[1:size(point_cloud, 1), 1:L1_dim]),
+                base_change_cocycle_tilde[1:L1_dim]
+            )
+        ), 1.0)
+
+        results[i] = θ_cc
+    end
+
+    return results
 end
+
 
 """
 build_complex_and_boundary_operator(vertices, edges)
