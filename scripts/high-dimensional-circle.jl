@@ -70,7 +70,7 @@ th = 17.3
 scale_factors = [1, 10]
 θ_cc_array = CircularCoordinates.get_circular_coordinates(X, p; threshold = th, multpl = scale_factors, verbose = true)
 
-fig = Figure(size = (1000, 1000), fontsize = 14, figure_padding = 75)
+fig = Figure(size = (1000, 885), fontsize = 14, figure_padding = 75)
 for (i, θs) in enumerate(θ_cc_array)
     ax_pca = Axis(fig[i, 1]; aspect = 1)
     scatter!(ax_pca, X_pca[:, 1], X_pca[:, 2];
@@ -92,6 +92,19 @@ for (i, θs) in enumerate(θ_cc_array)
     hidexdecorations!(ax_cc_vs_orig; ticks=true, ticklabels=true, grid=true)
     hideydecorations!(ax_cc_vs_orig; ticks=true, ticklabels=true, grid=true)
 end
+
+# Add colorbar to the right, spanning all rows, but don't stretch row spacing
+cb = Colorbar(fig[1:end, end+1],
+    colormap = :plasma,
+    limits = (0, 2π),
+    ticks = ([0, π, 2π], [L"0", L"\pi", L"2\pi"]),
+    width = 40,                 # twice as wide
+    height = Relative(0.5),     # half the height of the full grid
+    ticklabelsize = 28
+)
+
+# Increase only the gap between plots and colorbar
+colgap!(fig.layout, 2, 50)  # second column gap → 50px
 display(fig)
 
 if savefig
