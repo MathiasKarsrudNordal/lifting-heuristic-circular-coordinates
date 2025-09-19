@@ -1,3 +1,1 @@
 # **Lifting Cocycles: From Heuristic to Theory**
-
-**TODO:** Add description of how to activate project, install packages etc...
