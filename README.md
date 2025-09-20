@@ -4,7 +4,7 @@
 **Repository Structure**
 
 ```bash
-├─ figs       # Generated figures from the article
+├─ figs       # Generated figures
 ├─ notebooks  # Example of Algorithm 1 in practice (Example 4.3) and simulation for Figure 3
 ├─ scripts    # Scripts to reproduce results and plots
 └─ src        # Reusable functions and core logic
