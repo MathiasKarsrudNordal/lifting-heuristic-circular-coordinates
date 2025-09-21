@@ -5,7 +5,7 @@
 
 ```bash
 ├─ figs       # Generated figures
-├─ notebooks  # Example of Algorithm 1 in practice (Example 4.3) and simulation for Figure 3
+├─ notebooks  # Example of Algorithm 1 in practice (Example 4.3) and code to reproduce Figure 3
 ├─ scripts    # Scripts to reproduce results and plots
 └─ src        # Reusable functions and core logic
 ```
