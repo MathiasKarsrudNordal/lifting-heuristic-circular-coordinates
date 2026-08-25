@@ -9,8 +9,6 @@ homology cycles.
 
 ## Scaling before lifting
 
-[Circular coordinates on a trefoil before and after rescaling the finite-field cocycle](figs/trefoil-scaling.png)
+[![Circular coordinates on a trefoil before and after rescaling the finite-field cocycle](figs/trefoil-scaling.png)](figs/trefoil-scaling.pdf)
 
---
 
-The figures in the article can be generated using the scripts in `scripts`.
