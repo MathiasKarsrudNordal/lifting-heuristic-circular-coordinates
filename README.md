@@ -9,9 +9,8 @@ homology cycles.
 
 ## Scaling before lifting
 
-[![Circular coordinates on a trefoil before and after rescaling the finite-field cocycle](figs/trefoil-scaling.png)](figs/trefoil-scaling.pdf)
+[Circular coordinates on a trefoil before and after rescaling the finite-field cocycle](figs/trefoil-scaling.png)
 
-*For $p = 47$, directly lifting the cocycle returned by Ripser fails to produce
-the expected circular coordinates (left). Scaling the cocycle by 2 in the
-finite field before lifting yields an integral cocycle and recovers the circular
-coordinate (right). Click the figure for the vector PDF.*
+--
+
+The figures in the article can be generated using the scripts in `scripts`.
