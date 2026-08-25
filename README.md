@@ -14,22 +14,17 @@ homology cycles.
 
 #### Reproduction of figures
 
-**Fig. 2.**
-
+**Fig. 2:**
 Run `scripts/circular_coordinates/trefoil.py`.
 
-**Fig. 3.**
-
+**Fig. 3:**
 Run `scripts/non_liftable_lines.py`.
 
-**Fig. 4.**
-
+**Fig. 4:**
 Run `scripts/circular_coordinates/multiple_windings.py`.
 
-**Fig. 5.**
-
+**Fig. 5:**
 Run `scripts/winding_number_reduction.py`.
 
-**Fig. 6.**
-
+**Fig. 6:**
 Run `scripts/circular_coordinates/high_dimensional_circle.py`.
