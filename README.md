@@ -1,25 +1,17 @@
-# Lifting cocycles and circular coordinates
+# Lifting Cocycles: From Heuristic to Theory
 
-This project contains a minimal Python implementation of circular coordinates
-based on representative persistent cocycles returned by Ripser.
+The circular coordinates algorithm extracts circle-valued features from data by
+lifting persistent cocycles from a finite field to the integers. This repository
+accompanies our study of when the commonly used coefficientwise lift succeeds,
+how finite-field rescaling can make it succeed, and how an integral cocycle can
+be reduced to winding number 1. We also extend the lifting principles to
+homology cycles.
 
-```python
-from lifting_cocycles.circular_coordinates import compute_circular_coordinates
-from lifting_cocycles.datasets import circle
+## Scaling before lifting
 
-data = circle(500, seed=0, noise_std=0.02)
-result = compute_circular_coordinates(data[:, :2], prime=47)
+[![Circular coordinates on a trefoil before and after rescaling the finite-field cocycle](figs/trefoil-scaling.png)](figs/trefoil-scaling.pdf)
 
-angles = result.angles  # values in [0, 2*pi)
-```
-
-The implementation constructs the selected Vietoris--Rips one-skeleton and
-its sparse degree-zero coboundary operator. It directly applies the centered
-integer lift to Ripser's finite-field cocycle, then smooths it with SciPy's
-sparse LSMR solver. It currently neither detects nor corrects a failed lift.
-
-Run the tests with:
-
-```bash
-uv run python -m unittest discover -s tests
-```
+*For $p = 47$, directly lifting the cocycle returned by Ripser fails to produce
+the expected circular coordinates (left). Scaling the cocycle by 2 in the
+finite field before lifting yields an integral cocycle and recovers the circular
+coordinate (right). Click the figure for the vector PDF.*
