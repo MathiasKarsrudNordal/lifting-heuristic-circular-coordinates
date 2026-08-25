@@ -11,4 +11,18 @@ homology cycles.
 
 [![Circular coordinates on a trefoil before and after rescaling the finite-field cocycle](figs/trefoil-scaling.png)](figs/trefoil-scaling.pdf)
 
+---
+
+#### Reproduction of figures
+
+**Fig. 1.**
+
+**Fig. 2.**
+
+**Fig. 3.**
+
+**Fig. 4.**
+
+**Fig. 5.**
+
 
